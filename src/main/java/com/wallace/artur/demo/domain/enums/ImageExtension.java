@@ -1,10 +1,11 @@
 package com.wallace.artur.demo.domain.enums;
 
+import lombok.Getter;
 import org.springframework.http.MediaType;
 
-import java.awt.*;
 import java.util.Arrays;
 
+@Getter
 public enum ImageExtension {
     PNG(MediaType.IMAGE_PNG),
     JPEG(MediaType.IMAGE_JPEG),

@@ -39,5 +39,10 @@ public class Image {
     @Lob
     private byte[] file;
 
-
+    public String getFileName() {
+        //flowers.PGN
+        return getName()
+                .concat(".")
+                .concat(getExtension().name());
+    }
 }
