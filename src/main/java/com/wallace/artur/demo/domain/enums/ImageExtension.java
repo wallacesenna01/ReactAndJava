@@ -11,7 +11,6 @@ public enum ImageExtension {
     JPEG(MediaType.IMAGE_JPEG),
     GIF(MediaType.IMAGE_GIF);
 
-
     private  MediaType mediaType;
 
     ImageExtension(MediaType mediaType) {
