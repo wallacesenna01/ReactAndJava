@@ -5,6 +5,7 @@ import com.wallace.artur.demo.domain.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,19 +48,17 @@ public class ImageController {
 
     @GetMapping("/{id}")
     public ResponseEntity<byte []> getImage(@PathVariable String id) {
-       var possibleImage =  service.getById(id);
-       if(possibleImage.isEmpty()){
-           return ResponseEntity.notFound().build();
-       }
 
-        var image =  possibleImage.get();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(image.getExtension().getMediaType());
-        headers.setContentLength(image.getSize());
-        //inline; filename="image.PNG"
-        headers.setContentDispositionFormData("inline; filename=\"" + image.getFileName()+ "\"", image.getFileName());
-
-          return new  ResponseEntity<>(image.getFile(),headers, HttpStatus.OK);
+        return service.getById(id)
+                .map(image -> {
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setContentType(image.getExtension().getMediaType());
+                    headers.setContentLength(image.getSize());
+                    headers.setContentDisposition(ContentDisposition.inline()
+                            .filename(image.getFileName()).build());
+                    return new ResponseEntity<>(image.getFile(),headers, HttpStatus.OK);
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     public URI buildImageUrl(Image image) {

@@ -6,7 +6,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.plaf.PanelUI;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
