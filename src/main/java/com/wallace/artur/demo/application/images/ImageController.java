@@ -69,7 +69,7 @@ public class ImageController {
                                                  @RequestParam(value = "query", required = false) String query) {
 
         System.out.println("extension: " + extension);
-      var result =  service.search(ImageExtension.valueOf(extension), query);
+      var result =  service.search(ImageExtension.ofName(extension), query);
 
       var images =  result.stream().map(image -> {
           var url = buildImageUrl(image);
@@ -80,7 +80,7 @@ public class ImageController {
 
     public URI buildImageUrl(Image image) {
         String imagePath = "/" + image.getId();
-      return   ServletUriComponentsBuilder.fromCurrentRequest().path(imagePath).build().toUri();
+      return   ServletUriComponentsBuilder.fromCurrentRequestUri().path(imagePath).build().toUri();
     }
 
 }
