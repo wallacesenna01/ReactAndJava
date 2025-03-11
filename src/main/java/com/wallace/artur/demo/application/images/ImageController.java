@@ -1,6 +1,7 @@
 package com.wallace.artur.demo.application.images;
 
 import com.wallace.artur.demo.domain.entity.Image;
+import com.wallace.artur.demo.domain.enums.ImageExtension;
 import com.wallace.artur.demo.domain.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("v1/images")
@@ -59,6 +61,21 @@ public class ImageController {
                     return new ResponseEntity<>(image.getFile(),headers, HttpStatus.OK);
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    //localhost:8080/v1/images/?extension=PNG&query
+    @GetMapping
+    public ResponseEntity<List<ImageDTO>> search(@RequestParam(value = "extension", required = false, defaultValue = "") String extension,
+                                                 @RequestParam(value = "query", required = false) String query) {
+
+        System.out.println("extension: " + extension);
+      var result =  service.search(ImageExtension.valueOf(extension), query);
+
+      var images =  result.stream().map(image -> {
+          var url = buildImageUrl(image);
+          return  mapper.imageDTO(image, url.toString());
+    }).collect(Collectors.toList());
+           return ResponseEntity.ok(images);
     }
 
     public URI buildImageUrl(Image image) {
