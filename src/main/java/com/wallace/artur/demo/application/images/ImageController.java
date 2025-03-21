@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("v1/images")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 
 public class ImageController {
 
