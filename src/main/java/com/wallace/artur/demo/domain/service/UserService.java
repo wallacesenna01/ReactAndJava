@@ -5,7 +5,7 @@ import com.wallace.artur.demo.domain.entity.User;
 
 public interface UserService {
     User getByEmail(String email);
-    User save (User user);
+    User save(User user);
 
     AccessToken authenticate(String email, String password);
 }
