@@ -2,6 +2,7 @@ package com.wallace.artur.demo.application.images.jwt;
 
 import com.wallace.artur.demo.domain.AccessToken;
 import com.wallace.artur.demo.domain.entity.User;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -45,4 +46,19 @@ public class JwtServices {
         claims.put("name", user.getName());
         return claims;
     }
+
+    public String getEmailFromToken(String jwtToken) {
+        try {
+        return   Jwts.parser()
+                    .verifyWith(generator.getKey())
+                    .build()
+                    .parseSignedClaims(jwtToken)
+                    .getPayload()
+                    .getSubject();
+        }catch (JwtException e) {
+            throw new InvalidTokenException(e.getMessage());
+        }
+
+    }
+
 }
